@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Login">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Login">
     <children>
         <GridPane layoutY="1.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #292929;">
             <columnConstraints>
@@ -41,8 +40,8 @@
                         <Insets bottom="30.0" />
                     </GridPane.margin>
                 </Label>
-                <TextField GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                <PasswordField GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+                <TextField fx:id="username_input" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <PasswordField fx:id="password_input" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP" />
                 <Label text="Username" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets right="10.0" />
@@ -53,7 +52,7 @@
                         <Insets right="10.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
-                <Button mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #42bd7f;" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+                <Button fx:id="login_submit" mnemonicParsing="false" onAction="#login" prefWidth="150.0" style="-fx-background-color: #42bd7f;" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                     <font>
                         <Font size="14.0" />
                     </font>
