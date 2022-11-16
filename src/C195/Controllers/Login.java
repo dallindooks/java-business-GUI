@@ -1,19 +1,29 @@
 package C195.Controllers;
 
+import C195.DAO.userDAO;
 import C195.Helpers.JDBC;
+import C195.Models.User;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 
+import javax.swing.*;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
@@ -32,8 +42,10 @@ public class Login implements Initializable {
     public Label your_location_label;
     public Label location_label;
     public Label error_label;
+    String currentLang = Locale.getDefault().getDisplayLanguage();
 
-    public void login(){
+    public void login(ActionEvent actionEvent){
+        User currentUser;
         String username = username_input.getText();
         String db_username = "";
         String password = password_input.getText();
@@ -53,17 +65,28 @@ public class Login implements Initializable {
             if (db_userPass.equals(password) && db_userPass.length() > 0) {
                 pass_toggle = true;
             } else if (db_username.length() > 0 && !(db_userPass.equals(password) && db_userPass.length() > 0)) {
-                error_label.setText("wrong password buckaroo!");
+                if (currentLang.equals("French")){
+                    error_label.setText("Mot de passe incorrect");
+                } else {
+                    error_label.setText("wrong password buckaroo!");
+                }
             }
 
             if (db_username.equals(username) && db_username.length() > 0){
                 user_toggle = true;
             } else {
-                error_label.setText("no user found");
+                if (currentLang.equals("French")){
+                    error_label.setText("aucun utilisateur trouvé");
+                } else {
+                    error_label.setText("no user found");
+                }
             }
 
             if (user_toggle && pass_toggle){
                 System.out.println("login successful!");
+                currentUser = userDAO.getUser(db_username);
+                System.out.println(currentUser.username + " is currently logged in");
+                toAppointments(actionEvent);
             }
 
         } catch(Exception err) {
@@ -72,10 +95,22 @@ public class Login implements Initializable {
         }
     }
 
+    private void toAppointments(ActionEvent actionEvent) throws IOException {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/Appointments.fxml")));
+            Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setTitle("Appointments");
+            stage.setScene(scene);
+        } catch (Exception err) {
+            System.out.println("Error changing scenes");
+            System.out.println(err);
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         error_label.setText("");
-        String currentLang = Locale.getDefault().getDisplayLanguage();
         ZoneId z = ZoneId.systemDefault();
         location_label.setText(z.toString());
         System.out.println(currentLang);
