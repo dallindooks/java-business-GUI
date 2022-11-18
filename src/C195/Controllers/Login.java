@@ -43,9 +43,9 @@ public class Login implements Initializable {
     public Label location_label;
     public Label error_label;
     String currentLang = Locale.getDefault().getDisplayLanguage();
+    public static User currentUser;
 
     public void login(ActionEvent actionEvent){
-        User currentUser;
         String username = username_input.getText();
         String db_username = "";
         String password = password_input.getText();
@@ -106,6 +106,10 @@ public class Login implements Initializable {
             System.out.println("Error changing scenes");
             System.out.println(err);
         }
+    }
+
+    public static User getLoggedInUser(){
+        return currentUser;
     }
 
     @Override

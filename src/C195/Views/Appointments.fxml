@@ -32,7 +32,7 @@
       </Label>
       <Button layoutX="835.0" layoutY="55.0" mnemonicParsing="false" text="New Appointment" />
       <Button layoutX="665.0" layoutY="593.0" mnemonicParsing="false" text="Update Appointment" />
-      <Button layoutX="830.0" layoutY="593.0" mnemonicParsing="false" text="Delete Appointment" />
+      <Button fx:id="delete_button" layoutX="830.0" layoutY="593.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete Appointment" />
       <Label layoutX="606.0" layoutY="59.0" text="Sort By: " textFill="WHITE">
          <font>
             <Font size="14.0" />
@@ -41,5 +41,6 @@
       <ComboBox layoutX="665.0" layoutY="57.0" prefWidth="150.0" promptText="All" visibleRowCount="3" />
       <Button layoutX="540.0" layoutY="54.0" mnemonicParsing="false" text="--&gt;" />
       <Button layoutX="474.0" layoutY="55.0" mnemonicParsing="false" text="&lt;--" />
+      <Button fx:id="logout_button" layoutX="928.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
    </children>
 </AnchorPane>

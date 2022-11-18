@@ -11,18 +11,18 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #292929;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C195.Controllers.Appointments">
    <children>
-      <TableView layoutX="22.0" layoutY="101.0" prefHeight="476.0" prefWidth="932.0">
+      <TableView fx:id="appointment_table" layoutX="22.0" layoutY="101.0" prefHeight="476.0" prefWidth="932.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Appt ID" />
-          <TableColumn prefWidth="118.0" text="Title" />
-            <TableColumn prefWidth="155.0" text="Description" />
-            <TableColumn prefWidth="82.0" text="Location" />
-            <TableColumn prefWidth="87.0" text="Contact" />
-            <TableColumn prefWidth="67.0" text="Type" />
-            <TableColumn prefWidth="75.0" text="Start" />
-            <TableColumn prefWidth="81.0" text="End" />
-            <TableColumn prefWidth="88.0" text="Customer ID" />
-            <TableColumn prefWidth="103.0" text="User ID" />
+          <TableColumn fx:id="id_col" prefWidth="75.0" text="Appt ID" />
+          <TableColumn fx:id="title_col" prefWidth="118.0" text="Title" />
+            <TableColumn fx:id="description_col" prefWidth="155.0" text="Description" />
+            <TableColumn fx:id="location_col" prefWidth="82.0" text="Location" />
+            <TableColumn fx:id="contact_col" prefWidth="87.0" text="Contact" />
+            <TableColumn fx:id="type_col" prefWidth="67.0" text="Type" />
+            <TableColumn fx:id="start_col" prefWidth="75.0" text="Start" />
+            <TableColumn fx:id="end_col" prefWidth="81.0" text="End" />
+            <TableColumn fx:id="customer_id_col" prefWidth="88.0" text="Customer ID" />
+            <TableColumn fx:id="user_id_col" prefWidth="103.0" text="User ID" />
         </columns>
       </TableView>
       <Label layoutX="22.0" layoutY="53.0" text="Appointments" textFill="WHITE">
@@ -32,18 +32,15 @@
       </Label>
       <Button layoutX="835.0" layoutY="55.0" mnemonicParsing="false" text="New Appointment" />
       <Button layoutX="665.0" layoutY="593.0" mnemonicParsing="false" text="Update Appointment" />
-      <Button layoutX="830.0" layoutY="593.0" mnemonicParsing="false" text="Delete Appointment" />
-      <Label layoutX="205.0" layoutY="57.0" text="Viewing appointments from: " textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="396.0" layoutY="59.0" text="ALL" textFill="WHITE" />
+      <Button fx:id="delete_button" layoutX="830.0" layoutY="593.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete Appointment" />
       <Label layoutX="606.0" layoutY="59.0" text="Sort By: " textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <ComboBox layoutX="665.0" layoutY="57.0" prefWidth="150.0" promptText="All" visibleRowCount="3" />
+      <Button layoutX="540.0" layoutY="54.0" mnemonicParsing="false" text="--&gt;" />
+      <Button layoutX="474.0" layoutY="55.0" mnemonicParsing="false" text="&lt;--" />
+      <Button fx:id="logout_button" layoutX="928.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
    </children>
 </AnchorPane>
