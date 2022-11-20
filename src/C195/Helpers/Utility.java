@@ -12,8 +12,6 @@ public class Utility {
         alert.setTitle(title);
         alert.setHeaderText(header);
         Optional<ButtonType> confirm = alert.showAndWait();
-        if (confirm.get() == ButtonType.OK){
-            return true;
-        } return false;
+        return confirm.get() == ButtonType.OK;
     }
 }
