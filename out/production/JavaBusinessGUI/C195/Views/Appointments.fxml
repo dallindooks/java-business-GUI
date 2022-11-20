@@ -30,7 +30,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="835.0" layoutY="55.0" mnemonicParsing="false" text="New Appointment" />
+      <Button layoutX="835.0" layoutY="55.0" mnemonicParsing="false" onAction="#toCreateAppointment" text="New Appointment" />
       <Button layoutX="665.0" layoutY="593.0" mnemonicParsing="false" text="Update Appointment" />
       <Button fx:id="delete_button" layoutX="830.0" layoutY="593.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete Appointment" />
       <Label layoutX="606.0" layoutY="59.0" text="Sort By: " textFill="WHITE">

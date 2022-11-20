@@ -72,6 +72,14 @@ public class Appointments implements Initializable {
         stage.setScene(scene);
     }
 
+    public void toCreateAppointment(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/CreateAppointment.fxml")));
+        Stage stage = (Stage)((javafx.scene.Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Create an Appointment");
+        stage.setScene(scene);
+    }
+
     public void deleteAppointment() throws SQLException {
         selectedAppointment = (Appointment) appointment_table.getSelectionModel().getSelectedItem();
         if (Utility.confirmDelete("Delete Appointment", "Are you sure you want to delete " + selectedAppointment.getTitle() + "?")){

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #292929;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C195.Controllers.CreateAppointment">
+   <children>
+      <Label layoutX="47.0" layoutY="43.0" text="Create an Appointment" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="47.0" layoutY="92.0" text="Appointment ID" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="id_input" disable="true" layoutX="47.0" layoutY="117.0" />
+      <Label layoutX="47.0" layoutY="149.0" text="Title" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="title_input" layoutX="47.0" layoutY="174.0" />
+      <Label layoutX="47.0" layoutY="206.0" text="Description" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="description_input" layoutX="47.0" layoutY="231.0" />
+      <Label layoutX="47.0" layoutY="263.0" text="Location" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="location_input" layoutX="47.0" layoutY="288.0" />
+      <Label layoutX="47.0" layoutY="325.0" text="Type" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="type_input" layoutX="47.0" layoutY="350.0" />
+      <Label layoutX="47.0" layoutY="386.0" text="Start Date" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="start_datePicker" layoutX="35.0" layoutY="406.0" />
+      <Label layoutX="230.0" layoutY="381.0" text="Start Time" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="start_hour_input" layoutX="230.0" layoutY="406.0" prefHeight="25.0" prefWidth="14.0" />
+      <TextField fx:id="start_minutes_input" layoutX="256.0" layoutY="406.0" prefHeight="25.0" prefWidth="34.0" />
+      <ComboBox fx:id="start_amPm_input" layoutX="303.0" layoutY="406.0" prefHeight="25.0" prefWidth="26.0" />
+      <Label layoutX="243.0" layoutY="410.0" text=":" textFill="WHITE" translateX="5.0">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="47.0" layoutY="436.0" text="End Date" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="end_datePicker" layoutX="35.0" layoutY="456.0" />
+      <Label layoutX="230.0" layoutY="431.0" text="End Time" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="end_hours_input" layoutX="230.0" layoutY="456.0" prefHeight="25.0" prefWidth="14.0" />
+      <TextField fx:id="end_minutes_input" layoutX="256.0" layoutY="456.0" prefHeight="25.0" prefWidth="34.0" />
+      <ComboBox fx:id="end_amPm_input" layoutX="303.0" layoutY="456.0" prefHeight="25.0" prefWidth="26.0" />
+      <Label layoutX="243.0" layoutY="460.0" text=":" textFill="WHITE" translateX="5.0">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="562.0" layoutY="92.0" text="Customer Name" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="customer_input" layoutX="562.0" layoutY="117.0" prefWidth="150.0" />
+      <Label layoutX="562.0" layoutY="149.0" text="Contact Name" textFill="WHITE">
+         <font>
+            <Font name="Ebrima" size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="contactInput" layoutX="562.0" layoutY="174.0" prefWidth="150.0" />
+      <Hyperlink layoutX="752.0" layoutY="118.0" text="Create New Customer" />
+      <Hyperlink layoutX="752.0" layoutY="175.0" text="Create New Contact" />
+      <Label fx:id="title_error" layoutX="223.0" layoutY="178.0" text="ERROR" textFill="RED">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="description_error" layoutX="223.0" layoutY="235.0" text="ERROR" textFill="RED">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="location_error" layoutX="223.0" layoutY="292.0" text="ERROR" textFill="RED">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="type_error" layoutX="223.0" layoutY="354.0" text="ERROR" textFill="RED">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="start_error" layoutX="378.0" layoutY="410.0" text="ERROR" textFill="RED">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="end_error" layoutX="378.0" layoutY="460.0" text="ERROR" textFill="RED">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Button fx:id="create_button" layoutX="576.0" layoutY="458.0" mnemonicParsing="false" onAction="#AddAppointment" text="Create New Appointment" />
+   </children>
+</AnchorPane>
