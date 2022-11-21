@@ -1,5 +1,6 @@
 package C195.Controllers;
 
+import C195.DAO.ContactDAO;
 import C195.Helpers.JDBC;
 import C195.Models.Appointment;
 import javafx.collections.FXCollections;
@@ -12,10 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public class CreateAppointment implements Initializable {
@@ -27,13 +25,9 @@ public class CreateAppointment implements Initializable {
     public Label title_error;
     public ComboBox contactInput;
     public ComboBox customer_input;
-    public ComboBox end_amPm_input;
-    public TextField end_minutes_input;
-    public TextField end_hours_input;
+    public ComboBox end_time_input;
     public DatePicker end_datePicker;
-    public ComboBox start_amPm_input;
-    public TextField start_minutes_input;
-    public TextField start_hour_input;
+    public ComboBox start_time_input;
     public DatePicker start_datePicker;
     public TextField type_input;
     public TextField location_input;
@@ -51,12 +45,38 @@ public class CreateAppointment implements Initializable {
         description_error.setText("");
         try{
             id_input.setText(String.valueOf(getNewAppointmentId()));
+            contactInput.setItems(ContactDAO.getAllContactNames());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        ObservableList<String> availableTimes = FXCollections.observableArrayList();
+        int open = 8;
+        int close = 22;
+        while (open < close){
+            if (open < 12) {
+                availableTimes.add(String.valueOf(open) + ":00 AM");
+                availableTimes.add(String.valueOf(open) + ":30 AM");
+            } else{
+                availableTimes.add(String.valueOf(open - 12) + ":00 PM");
+                availableTimes.add(String.valueOf(open - 12) + ":30 PM");
+            }
+            open++;
+        }
+        start_time_input.setItems(availableTimes);
+        end_time_input.setItems(availableTimes);
+
     }
 
-    public void AddAppointment(ActionEvent actionEvent) {
+    public void AddAppointment(ActionEvent actionEvent) throws SQLException {
+        Connection connection = JDBC.getConnection();
+        String query = "INSERT INTO appointments VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, getNewAppointmentId());
+        ps.setString(2, title_input.getText());
+        ps.setString(3, description_input.getText());
+        ps.setString(4, location_input.getText());
+        ps.setString(5, type_input.getText());
+//        ps.setTimestamp(5, Timestamp.valueOf());
     }
 
     public int getNewAppointmentId() throws SQLException {
