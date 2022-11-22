@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #292929;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C195.Controllers.CreateAppointment">
    <children>
       <Label layoutX="47.0" layoutY="43.0" text="Create an Appointment" textFill="WHITE">
@@ -115,6 +114,7 @@
             <Font name="Ebrima" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="create_button" layoutX="576.0" layoutY="458.0" mnemonicParsing="false" onAction="#AddAppointment" text="Create New Appointment" />
+      <Button fx:id="create_button" layoutX="576.0" layoutY="458.0" mnemonicParsing="false" onAction="#addAppointment" text="Create New Appointment" />
+      <Button layoutX="783.0" layoutY="458.0" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
    </children>
 </AnchorPane>

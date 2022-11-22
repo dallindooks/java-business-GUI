@@ -1,20 +1,33 @@
 package C195.Controllers;
 
 import C195.DAO.ContactDAO;
+import C195.DAO.CustomerDAO;
 import C195.Helpers.JDBC;
 import C195.Models.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static java.lang.Integer.parseInt;
 
 public class CreateAppointment implements Initializable {
     public Label end_error;
@@ -46,6 +59,7 @@ public class CreateAppointment implements Initializable {
         try{
             id_input.setText(String.valueOf(getNewAppointmentId()));
             contactInput.setItems(ContactDAO.getAllContactNames());
+            customer_input.setItems(CustomerDAO.getAllCustomerNames());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -56,7 +70,7 @@ public class CreateAppointment implements Initializable {
             if (open < 12) {
                 availableTimes.add(String.valueOf(open) + ":00 AM");
                 availableTimes.add(String.valueOf(open) + ":30 AM");
-            } else{
+            } else {
                 availableTimes.add(String.valueOf(open - 12) + ":00 PM");
                 availableTimes.add(String.valueOf(open - 12) + ":30 PM");
             }
@@ -66,16 +80,34 @@ public class CreateAppointment implements Initializable {
         end_time_input.setItems(availableTimes);
 
     }
+    public LocalDateTime dateStringFormatter(LocalDate localDate, String stringToDate){
+        String[] stringArr = stringToDate.split(" ");
+        String formattedTime = "";
+        if (stringArr[1].equals("PM")) {
+            String[] stringNumArr = stringArr[0].split(":");
+            int stringTimeNum = parseInt(stringNumArr[0]) + 12;
+            formattedTime = String.valueOf(stringTimeNum).concat(":").concat(stringNumArr[1]);
+        } else {
+            String[] stringNumArr = stringArr[0].split(":");
+            formattedTime = (parseInt(stringNumArr[0]) >= 10) ? stringArr[0] : "0".concat(stringArr[0]);
+        };
+        LocalDateTime formattedDateTime = LocalDateTime.of(localDate, LocalTime.parse(formattedTime));
+        return formattedDateTime;
+    }
 
-    public void AddAppointment(ActionEvent actionEvent) throws SQLException {
-        Connection connection = JDBC.getConnection();
-        String query = "INSERT INTO appointments VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, getNewAppointmentId());
-        ps.setString(2, title_input.getText());
-        ps.setString(3, description_input.getText());
-        ps.setString(4, location_input.getText());
-        ps.setString(5, type_input.getText());
+    public void addAppointment(ActionEvent actionEvent) throws SQLException {
+        LocalDateTime startTime = dateStringFormatter(start_datePicker.getValue() ,start_time_input.getValue().toString());
+        LocalDateTime endTime = dateStringFormatter(end_datePicker.getValue(), end_time_input.getValue().toString());
+        System.out.println(endTime);
+
+//        Connection connection = JDBC.getConnection();
+//        String query = "INSERT INTO appointments VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//        PreparedStatement ps = connection.prepareStatement(query);
+//        ps.setInt(1, getNewAppointmentId());
+//        ps.setString(2, title_input.getText());
+//        ps.setString(3, description_input.getText());
+//        ps.setString(4, location_input.getText());
+//        ps.setString(5, type_input.getText());
 //        ps.setTimestamp(5, Timestamp.valueOf());
     }
 
@@ -89,5 +121,13 @@ public class CreateAppointment implements Initializable {
             lastAppointmentId = rs.getInt("max(Appointment_ID)");
         }
         return lastAppointmentId > 999 ? lastAppointmentId + 1 : null;
+    }
+
+    public void toMain(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/Appointments.fxml")));
+        Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Appointments");
+        stage.setScene(scene);
     }
 }
