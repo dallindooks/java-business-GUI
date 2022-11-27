@@ -44,4 +44,26 @@ public class CustomerDAO {
         }
         return customerNames;
     }
+
+    public static Customer getCustomerByName(String customerName) throws SQLException {
+        Connection connection = JDBC.getConnection();
+        Statement stmt = connection.createStatement();
+        String query = "SELECT * FROM customers WHERE Customer_Name = '" + customerName + "'";
+        ResultSet rs = stmt.executeQuery(query);
+        Customer customer = null;
+        while (rs.next()) {
+            int customerId = rs.getInt("Customer_ID");
+            String name = rs.getString("Customer_Name");
+            String address = rs.getString("Address");
+            String postalCode = rs.getString("Postal_Code");
+            String phone = rs.getString("Phone");
+            LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+            String createdBy = rs.getString("Created_By");
+            Timestamp lastUpdate = rs.getTimestamp("Last_Update");
+            String lastUpdatedBy = rs.getString("Last_Updated_By");
+            int divisionId = rs.getInt("Division_ID");
+            customer = new Customer(customerId, name, address, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdatedBy, divisionId);
+        }
+        return customer;
+    }
 }

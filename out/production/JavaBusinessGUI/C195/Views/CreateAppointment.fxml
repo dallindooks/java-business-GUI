@@ -81,7 +81,7 @@
             <Font name="Ebrima" size="14.0" />
          </font>
       </Label>
-      <ComboBox fx:id="contactInput" layoutX="562.0" layoutY="174.0" prefWidth="150.0" />
+      <ComboBox fx:id="contact_input" layoutX="562.0" layoutY="174.0" prefWidth="150.0" />
       <Hyperlink layoutX="752.0" layoutY="118.0" text="Create New Customer" />
       <Hyperlink layoutX="752.0" layoutY="175.0" text="Create New Contact" />
       <Label fx:id="title_error" layoutX="223.0" layoutY="178.0" text="ERROR" textFill="RED">
@@ -116,5 +116,15 @@
       </Label>
       <Button fx:id="create_button" layoutX="576.0" layoutY="458.0" mnemonicParsing="false" onAction="#addAppointment" text="Create New Appointment" />
       <Button layoutX="783.0" layoutY="458.0" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
+      <Label fx:id="customer_error" layoutX="877.0" layoutY="121.0" text="ERROR" textFill="RED" wrapText="true">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="contact_error" layoutX="877.0" layoutY="178.0" text="ERROR" textFill="RED" wrapText="true">
+         <font>
+            <Font name="Ebrima" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

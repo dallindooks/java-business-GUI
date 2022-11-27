@@ -37,4 +37,19 @@ public class ContactDAO {
         }
         return contactNames;
     }
+
+    public static Contact getContactByName(String contactName) throws SQLException {
+        Connection connection = JDBC.getConnection();
+        Statement stmt = connection.createStatement();
+        String query = "SELECT * FROM contacts WHERE Contact_Name = '" + contactName + "'";
+        ResultSet rs = stmt.executeQuery(query);
+        Contact contact = null;
+        while (rs.next()) {
+            int contactId = rs.getInt("Contact_ID");
+            String name = rs.getString("Contact_Name");
+            String email = rs.getString("Email");
+            contact = new Contact(contactId, name, email);
+        }
+        return contact;
+    }
 }

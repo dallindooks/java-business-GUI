@@ -82,7 +82,8 @@ public class Appointments implements Initializable {
 
     public void deleteAppointment() throws SQLException {
         selectedAppointment = (Appointment) appointment_table.getSelectionModel().getSelectedItem();
-        if (Utility.confirmDelete("Delete Appointment", "Are you sure you want to delete " + selectedAppointment.getTitle() + "?")){
+        if (Utility.confirmDelete("Delete Appointment", "Are you sure you want to delete '" + selectedAppointment.getTitle() + "' with Appointment ID " +
+                selectedAppointment.getAppointmentId() + " and type " + selectedAppointment.getType() + "?")){
             appointmentDAO.deleteAppointment(selectedAppointment.getAppointmentId());
             getAllAppointments();
             appointment_table.setItems(appointments);
