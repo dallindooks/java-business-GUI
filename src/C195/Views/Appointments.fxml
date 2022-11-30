@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #292929;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C195.Controllers.Appointments">
    <children>
       <TableView fx:id="appointment_table" layoutX="22.0" layoutY="101.0" prefHeight="476.0" prefWidth="932.0">
@@ -38,9 +37,10 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <ComboBox layoutX="665.0" layoutY="57.0" prefWidth="150.0" promptText="All" visibleRowCount="3" />
-      <Button layoutX="540.0" layoutY="54.0" mnemonicParsing="false" text="--&gt;" />
-      <Button layoutX="474.0" layoutY="55.0" mnemonicParsing="false" text="&lt;--" />
+      <ComboBox fx:id="filter_selection" layoutX="665.0" layoutY="57.0" onAction="#initialFilterAppointments" prefWidth="150.0" promptText="All" visibleRowCount="3" />
+      <Button fx:id="increment" layoutX="540.0" layoutY="54.0" mnemonicParsing="false" onAction="#increment" text="--&gt;" />
+      <Button fx:id="decrement" layoutX="474.0" layoutY="55.0" mnemonicParsing="false" onAction="#decrement" text="&lt;--" />
       <Button fx:id="logout_button" layoutX="928.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
+      <Label fx:id="filter_label" layoutX="348.0" layoutY="58.0" textFill="WHITE" />
    </children>
 </AnchorPane>
