@@ -4,6 +4,9 @@ import C195.DAO.ContactDAO;
 import C195.DAO.CustomerDAO;
 import C195.Helpers.JDBC;
 import C195.Helpers.Utility;
+import C195.Models.Appointment;
+import C195.Models.Contact;
+import C195.Models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +26,7 @@ import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
-public class CreateAppointment implements Initializable {
+public class UpdateAppointment implements Initializable {
     public Label end_error;
     public Label start_error;
     public Label type_error;
@@ -43,6 +46,10 @@ public class CreateAppointment implements Initializable {
     public TextField id_input;
     public Label customer_error;
     public Label contact_error;
+    ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
+    ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
+
+    public Appointment selectedAppointment;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,6 +62,8 @@ public class CreateAppointment implements Initializable {
         customer_error.setText("");
         contact_error.setText("");
         try{
+            contactObservableList = ContactDAO.getAllContacts();
+            customerObservableList = CustomerDAO.getAllCustomers();
             id_input.setText(String.valueOf(getNewAppointmentId()));
             contact_input.setItems(ContactDAO.getAllContactNames());
             customer_input.setItems(CustomerDAO.getAllCustomerNames());
@@ -82,10 +91,33 @@ public class CreateAppointment implements Initializable {
         }
         start_time_input.setItems(availableTimes);
         end_time_input.setItems(availableTimes);
-
+        selectedAppointment = Appointments.selectedAppointment;
+        id_input.setText(String.valueOf(selectedAppointment.getAppointmentId()));
+        title_input.setText(selectedAppointment.getTitle());
+        description_input.setText(selectedAppointment.getDescription());
+        location_input.setText(selectedAppointment.getLocation());
+        type_input.setText(selectedAppointment.getType());
+        start_datePicker.setValue(LocalDate.from(selectedAppointment.start));
+        end_datePicker.setValue(LocalDate.from(selectedAppointment.end));
+        String[] startTimeArr = selectedAppointment.start.toString().split("T");
+        String[] startbreakdown = startTimeArr[1].split(":");
+        int startNum = parseInt(startbreakdown[0]);
+        String startString = startNum > 12 ? String.valueOf(startNum-12) + ":" + startbreakdown[1] + " PM" : String.valueOf(startNum) + ":" + startbreakdown[1] + " AM";
+        start_time_input.setValue(startString);
+        String[] endTimeArr = selectedAppointment.end.toString().split("T");
+        String[] endbreakdown = endTimeArr[1].split(":");
+        int endNum = parseInt(endbreakdown[0]);
+        String endString = endNum > 12 ? String.valueOf(endNum-12) + ":" + endbreakdown[1] + " PM" : String.valueOf(endNum) + ":" + endbreakdown[1] + " AM";
+        end_time_input.setValue(endString);
+        contactObservableList.forEach( (contact) -> {
+            if (contact.getContactId() == selectedAppointment.getContactId()) contact_input.setValue(contact.getContactName());
+        });
+        customerObservableList.forEach( (customer) -> {
+            if (customer.getCustomerId() == selectedAppointment.getCustomerId()) customer_input.setValue(customer.getCustomerName());
+        });
     }
 
-    public void addAppointment(ActionEvent actionEvent) throws SQLException {
+    public void updateAppointment(ActionEvent actionEvent) throws SQLException {
         try {
             LocalDateTime startTime;
             LocalDateTime endTime;
@@ -165,28 +197,29 @@ public class CreateAppointment implements Initializable {
 //          end of validation
 //          upload new appointment
             Connection connection = JDBC.getConnection();
-            String query = "INSERT INTO appointments VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String query = "UPDATE appointments SET Title = ?, " +
+                    "Description = ?, Location = ?, Type = ?, " +
+                    "Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?," +
+                    "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = " + selectedAppointment.getAppointmentId();
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, getNewAppointmentId());
-            ps.setString(2, title_input.getText());
-            ps.setString(3, description_input.getText());
-            ps.setString(4, location_input.getText());
-            ps.setString(5, type_input.getText());
-            ps.setTimestamp(6, Timestamp.from(utcStartZoned.toInstant()));
-            ps.setTimestamp(7, Timestamp.from(utcEndZoned.toInstant()));
-            ps.setDate(8, Date.valueOf(LocalDate.now()));
-            ps.setString(9, Login.currentUser.username);
-            ps.setDate(10, Date.valueOf(LocalDate.now()));
-            ps.setString(11, Login.currentUser.username);
-            ps.setInt(12, CustomerDAO.getCustomerByName(customer_input.getValue().toString()).getCustomerId());
-            ps.setInt(13, Login.currentUser.userId);
-            ps.setInt(14, ContactDAO.getContactByName(contact_input.getValue().toString()).getContactId());
+            ps.setString(1, title_input.getText());
+            ps.setString(2, description_input.getText());
+            ps.setString(3, location_input.getText());
+            ps.setString(4, type_input.getText());
+            ps.setTimestamp(5, Timestamp.from(utcStartZoned.toInstant()));
+            ps.setTimestamp(6, Timestamp.from(utcEndZoned.toInstant()));
+            ps.setDate(7, Date.valueOf(LocalDate.now()));
+            ps.setString(8, Login.currentUser.username);
+            ps.setInt(9, CustomerDAO.getCustomerByName(customer_input.getValue().toString()).getCustomerId());
+            ps.setInt(10, Login.currentUser.userId);
+            ps.setInt(11, ContactDAO.getContactByName(contact_input.getValue().toString()).getContactId());
+            System.out.println(query);
             if (checksToggle8 == 8) {
                 ps.execute();
                 toMain(actionEvent);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("");
-                alert.setHeaderText("Appointment Created Successfully");
+                alert.setHeaderText("Appointment Updated Successfully");
                 Optional<ButtonType> confirm = alert.showAndWait();
             } else {
                 checksToggle8 = 0;

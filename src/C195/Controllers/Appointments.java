@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.IsoFields;
+import java.time.temporal.TemporalAccessor;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
@@ -40,7 +42,7 @@ public class Appointments implements Initializable {
     public ComboBox filter_selection;
     public Button increment;
     public Button decrement;
-    public Button logout_button;
+    public Button back_button;
     public Label filter_label;
     public static Appointment selectedAppointment;
 
@@ -84,20 +86,12 @@ public class Appointments implements Initializable {
         user_id_col.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
 
-    public void logout(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/login.fxml")));
-        Stage stage = (Stage)((javafx.scene.Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setTitle("Welcome Back!");
-        stage.setScene(scene);
+    public void toReports(ActionEvent actionEvent) throws IOException {
+        Utility.changeScene(actionEvent, "/C195/Views/Reports.fxml");
     }
 
     public void toCreateAppointment(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/CreateAppointment.fxml")));
-        Stage stage = (Stage)((javafx.scene.Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setTitle("Create an Appointment");
-        stage.setScene(scene);
+        Utility.changeScene(actionEvent, "/C195/Views/CreateAppointment.fxml");
     }
 
     public void deleteAppointment() throws SQLException {
@@ -168,6 +162,9 @@ public class Appointments implements Initializable {
                 LocalDateTime apptDate = appt.getStart();
                 WeekFields weekFields = WeekFields.of(Locale.getDefault());
                 int weekNumber = apptDate.get(weekFields.weekOfWeekBasedYear());
+                Integer weeksOfYear = Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR);
+                if (weekAtCompare > weeksOfYear) weekAtCompare = 0;
+                if (weekAtCompare < 0 ) weekAtCompare = weeksOfYear;
                 if (weekNumber == weekAtCompare) filteredAppointments.add(appt);
             }
             appointment_table.setItems(filteredAppointments);
@@ -177,9 +174,16 @@ public class Appointments implements Initializable {
             Calendar cal = Calendar.getInstance();
             for (Appointment appt: appointments){
                 int apptMonth = appt.getStart().getMonthValue() - 1; //minus one because Calendar is 0 indexed and Dates are indexed at 1
+                if (monthAtCompare > 11) monthAtCompare = 0;
+                if (monthAtCompare < 0) monthAtCompare = 11;
                 if (apptMonth == monthAtCompare) filteredAppointments.add(appt);
             }
             appointment_table.setItems(filteredAppointments);
         }
+    }
+
+    public void toUpdateAppointment(ActionEvent actionEvent) throws IOException {
+        selectedAppointment = (Appointment) appointment_table.getSelectionModel().getSelectedItem();
+        Utility.changeScene(actionEvent, "/C195/Views/UpdateAppointment.fxml");
     }
 }

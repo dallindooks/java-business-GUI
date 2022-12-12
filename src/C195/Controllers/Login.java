@@ -2,6 +2,7 @@ package C195.Controllers;
 
 import C195.DAO.userDAO;
 import C195.Helpers.JDBC;
+import C195.Helpers.Utility;
 import C195.Models.User;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -96,16 +97,7 @@ public class Login implements Initializable {
     }
 
     private void toAppointments(ActionEvent actionEvent) throws IOException {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/Appointments.fxml")));
-            Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setTitle("Appointments");
-            stage.setScene(scene);
-        } catch (Exception err) {
-            System.out.println("Error changing scenes");
-            System.out.println(err);
-        }
+        Utility.changeScene(actionEvent, "/C195/Views/Reports.fxml");
     }
 
     public static User getLoggedInUser(){

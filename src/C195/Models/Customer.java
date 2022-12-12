@@ -32,6 +32,10 @@ public class Customer {
         return customerId;
     }
 
+    public String getCustomerName() {
+        return name;
+    }
+
     public int getDivisionId() {
         return divisionId;
     }
