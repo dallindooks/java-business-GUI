@@ -64,7 +64,6 @@ public class UpdateAppointment implements Initializable {
         try{
             contactObservableList = ContactDAO.getAllContacts();
             customerObservableList = CustomerDAO.getAllCustomers();
-            id_input.setText(String.valueOf(getNewAppointmentId()));
             contact_input.setItems(ContactDAO.getAllContactNames());
             customer_input.setItems(CustomerDAO.getAllCustomerNames());
         } catch (SQLException throwables) {
@@ -117,6 +116,11 @@ public class UpdateAppointment implements Initializable {
         });
     }
 
+    /**
+     * method to update an appointment. It also converts the Strings selected for start and end times into localDatetimes and then into UTC times for the database
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void updateAppointment(ActionEvent actionEvent) throws SQLException {
         try {
             LocalDateTime startTime;
@@ -230,23 +234,12 @@ public class UpdateAppointment implements Initializable {
 
     }
 
-    public int getNewAppointmentId() throws SQLException {
-        int lastAppointmentId = 0;
-        Connection connection = JDBC.getConnection();
-        Statement stmt = connection.createStatement();
-        String query = "SELECT MAX(Appointment_ID) FROM appointments";
-        ResultSet rs = stmt.executeQuery(query);
-        while (rs.next()) {
-            lastAppointmentId = rs.getInt("max(Appointment_ID)");
-        }
-        return lastAppointmentId > 999 ? lastAppointmentId + 1 : null;
-    }
-
+    /**
+     * navigates to appointments page
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/Appointments.fxml")));
-        Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setTitle("Appointments");
-        stage.setScene(scene);
+        Utility.changeScene(actionEvent, "/C195/Views/Appointments.fxml");
     }
 }

@@ -12,16 +12,16 @@
    <children>
       <TableView fx:id="appointment_table" layoutX="22.0" layoutY="101.0" prefHeight="476.0" prefWidth="932.0">
         <columns>
-          <TableColumn fx:id="id_col" prefWidth="75.0" text="Appt ID" />
-          <TableColumn fx:id="title_col" prefWidth="118.0" text="Title" />
-            <TableColumn fx:id="description_col" prefWidth="155.0" text="Description" />
-            <TableColumn fx:id="location_col" prefWidth="82.0" text="Location" />
-            <TableColumn fx:id="contact_col" prefWidth="87.0" text="Contact" />
-            <TableColumn fx:id="type_col" prefWidth="67.0" text="Type" />
-            <TableColumn fx:id="start_col" prefWidth="75.0" text="Start" />
-            <TableColumn fx:id="end_col" prefWidth="81.0" text="End" />
-            <TableColumn fx:id="customer_id_col" prefWidth="88.0" text="Customer ID" />
-            <TableColumn fx:id="user_id_col" prefWidth="103.0" text="User ID" />
+          <TableColumn fx:id="id_col" editable="false" prefWidth="75.0" text="Appt ID" />
+          <TableColumn fx:id="title_col" editable="false" prefWidth="118.0" text="Title" />
+            <TableColumn fx:id="description_col" editable="false" prefWidth="155.0" text="Description" />
+            <TableColumn fx:id="location_col" editable="false" prefWidth="82.0" text="Location" />
+            <TableColumn fx:id="contact_col" editable="false" prefWidth="87.0" text="Contact" />
+            <TableColumn fx:id="type_col" editable="false" prefWidth="67.0" text="Type" />
+            <TableColumn fx:id="start_col" editable="false" prefWidth="75.0" text="Start" />
+            <TableColumn fx:id="end_col" editable="false" prefWidth="81.0" text="End" />
+            <TableColumn fx:id="customer_id_col" editable="false" prefWidth="88.0" text="Customer ID" />
+            <TableColumn fx:id="user_id_col" editable="false" prefWidth="103.0" text="User ID" />
         </columns>
       </TableView>
       <Label layoutX="22.0" layoutY="53.0" text="Appointments" textFill="WHITE">
@@ -40,7 +40,7 @@
       <ComboBox fx:id="filter_selection" layoutX="665.0" layoutY="57.0" onAction="#initialFilterAppointments" prefWidth="150.0" promptText="All" visibleRowCount="3" />
       <Button fx:id="increment" layoutX="540.0" layoutY="54.0" mnemonicParsing="false" onAction="#increment" text="--&gt;" />
       <Button fx:id="decrement" layoutX="474.0" layoutY="55.0" mnemonicParsing="false" onAction="#decrement" text="&lt;--" />
-      <Button fx:id="back_button" layoutX="928.0" layoutY="14.0" mnemonicParsing="false" onAction="#toReports" text="Go Back" />
+      <Button fx:id="back_button" layoutX="22.0" layoutY="593.0" mnemonicParsing="false" onAction="#toReports" text="Go Back" />
       <Label fx:id="filter_label" layoutX="348.0" layoutY="58.0" textFill="WHITE" />
    </children>
 </AnchorPane>

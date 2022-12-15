@@ -10,7 +10,12 @@ import java.sql.Statement;
 import java.util.Date;
 
 public class userDAO {
-
+    /**
+     * method to get a user by username
+     * @param username username input
+     * @return returns a User
+     * @throws SQLException
+     */
     public static User getUser(String username) throws SQLException {
             User userResult;
             Connection connection = JDBC.getConnection();

@@ -2,8 +2,11 @@ package C195.Controllers;
 
 import C195.DAO.ContactDAO;
 import C195.DAO.CustomerDAO;
+import C195.DAO.appointmentDAO;
 import C195.Helpers.JDBC;
 import C195.Helpers.Utility;
+import C195.Models.Appointment;
+import C195.Models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +22,7 @@ import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
@@ -44,6 +48,8 @@ public class CreateAppointment implements Initializable {
     public Label customer_error;
     public Label contact_error;
 
+    public ObservableList<Appointment> theirAppointments;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         title_error.setText("");
@@ -64,8 +70,6 @@ public class CreateAppointment implements Initializable {
         ObservableList<String> availableTimes = FXCollections.observableArrayList();
 //        Initialization of business hours
         int[] openHours = Utility.getBusinessHours(8, 22);
-        System.out.println(openHours[0]);
-        System.out.println(openHours[1]);
         while (openHours[0] < openHours[1]){
             if (openHours[0] < 12) {
                 availableTimes.add(String.valueOf(openHours[0]) + ":00 AM");
@@ -85,10 +89,15 @@ public class CreateAppointment implements Initializable {
 
     }
 
+    /**
+     * method to add and save an appointment to the database. Also it contains all of the logical checks to ensure the inputs are valid.
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void addAppointment(ActionEvent actionEvent) throws SQLException {
         try {
-            LocalDateTime startTime;
-            LocalDateTime endTime;
+            LocalDateTime startTime = null;
+            LocalDateTime endTime = null;
             ZonedDateTime startTimeZoned;
             ZonedDateTime endTimeZoned;
             ZonedDateTime utcStartZoned = null;
@@ -162,6 +171,25 @@ public class CreateAppointment implements Initializable {
                 checksToggle8++;
                 customer_error.setText("");
             }
+
+//          checks for overlapping appointments for the selected customer
+            Customer selectedCustomer = CustomerDAO.getCustomerByName(customer_input.getValue().toString());
+            theirAppointments = (appointmentDAO.getAllAppointments(Login.getLoggedInUser().userId));
+            theirAppointments.stream().filter((appt) -> appt.getCustomerId() == selectedCustomer.getCustomerId()).findAny().get();
+            DateTimeFormatter customFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            for (Appointment appt: theirAppointments) {
+                LocalDateTime apptStart = appt.getStart();
+                LocalDateTime apptEnd = appt.getEnd();
+                if (!apptStart.isAfter(startTime) && !apptEnd.isBefore(endTime)){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("");
+                    alert.setHeaderText(selectedCustomer.getCustomerName() +  " already has a scheduled appointment at this time.");
+                    alert.setContentText("Conflicting appointment has ID: " + appt.getAppointmentId() + " and is scheduled on " +
+                    apptStart.format(customFormat) + " and lasts until " + apptEnd.format(customFormat));
+                    Optional<ButtonType> confirm = alert.showAndWait();
+                    return;
+                }
+            }
 //          end of validation
 //          upload new appointment
             Connection connection = JDBC.getConnection();
@@ -178,7 +206,7 @@ public class CreateAppointment implements Initializable {
             ps.setString(9, Login.currentUser.username);
             ps.setDate(10, Date.valueOf(LocalDate.now()));
             ps.setString(11, Login.currentUser.username);
-            ps.setInt(12, CustomerDAO.getCustomerByName(customer_input.getValue().toString()).getCustomerId());
+            ps.setInt(12, selectedCustomer.getCustomerId());
             ps.setInt(13, Login.currentUser.userId);
             ps.setInt(14, ContactDAO.getContactByName(contact_input.getValue().toString()).getContactId());
             if (checksToggle8 == 8) {
@@ -197,6 +225,11 @@ public class CreateAppointment implements Initializable {
 
     }
 
+    /**
+     * method that returns a unique appointment id
+     * @return
+     * @throws SQLException
+     */
     public int getNewAppointmentId() throws SQLException {
         int lastAppointmentId = 0;
         Connection connection = JDBC.getConnection();
@@ -209,11 +242,12 @@ public class CreateAppointment implements Initializable {
         return lastAppointmentId > 999 ? lastAppointmentId + 1 : null;
     }
 
+    /**
+     * navigates to appointments page
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/C195/Views/Appointments.fxml")));
-        Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setTitle("Appointments");
-        stage.setScene(scene);
+        Utility.changeScene(actionEvent, "/C195/Views/Appointments.fxml");
     }
 }

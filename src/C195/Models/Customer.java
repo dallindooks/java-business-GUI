@@ -3,6 +3,9 @@ package C195.Models;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * Customer Class
+ */
 public class Customer {
     public int customerId;
     public String name;
@@ -15,6 +18,19 @@ public class Customer {
     public String lastUpdatedBy;
     public int divisionId;
 
+    /**
+     * Constructor for customer class
+     * @param customerId
+     * @param name
+     * @param address
+     * @param postalCode
+     * @param phone
+     * @param createdDate
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     * @param divisionId
+     */
     public Customer (int customerId, String name, String address, String postalCode, String phone, LocalDateTime createdDate, String createdBy, Timestamp lastUpdate,String lastUpdatedBy, int divisionId){
         this.customerId = customerId;
         this.name = name;

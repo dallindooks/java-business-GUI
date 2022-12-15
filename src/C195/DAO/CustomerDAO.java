@@ -11,7 +11,11 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 public class CustomerDAO {
-
+    /**
+     * method to get all customers
+     * @return returns a list of customers
+     * @throws SQLException
+     */
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
         ObservableList<Customer> customersResult = FXCollections.observableArrayList();
         Connection connection = JDBC.getConnection();
@@ -35,6 +39,10 @@ public class CustomerDAO {
         return customersResult;
     }
 
+    /**
+     * method to get a list of customer names
+     * @return returns a list of strings
+     */
     public static ObservableList<String> getAllCustomerNames(){
         ObservableList<String> customerNames = FXCollections.observableArrayList();
         try {
@@ -45,6 +53,12 @@ public class CustomerDAO {
         return customerNames;
     }
 
+    /**
+     * method to get a single customer by name
+     * @param customerName customer name string input
+     * @return returns a single customer
+     * @throws SQLException
+     */
     public static Customer getCustomerByName(String customerName) throws SQLException {
         Connection connection = JDBC.getConnection();
         Statement stmt = connection.createStatement();
@@ -65,5 +79,16 @@ public class CustomerDAO {
             customer = new Customer(customerId, name, address, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdatedBy, divisionId);
         }
         return customer;
+    }
+
+    /**
+     * method to delete a customer
+     * @param Id customer id input
+     * @throws SQLException
+     */
+    public static void deleteCustomer(int Id) throws SQLException {
+        Statement statement = JDBC.getConnection().createStatement();
+        String query = "DELETE FROM customers WHERE Customer_ID=" + Id;
+        statement.execute(query);
     }
 }

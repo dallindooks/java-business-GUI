@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * Appointment class
+ */
 public class Appointment {
     public int appointmentId, customerId, userId, contactId;
     public String title;
@@ -17,6 +20,23 @@ public class Appointment {
     public Timestamp lastUpdated;
     public String lastUpdatedBy;
 
+    /**
+     * Appointment constructor
+     * @param appointmentId
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param start
+     * @param end
+     * @param createDate
+     * @param createdBy
+     * @param lastUpdated
+     * @param lastUpdatedBy
+     * @param customerId
+     * @param userId
+     * @param contactId
+     */
     public Appointment(int appointmentId, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end,
                        Date createDate, String createdBy, Timestamp lastUpdated, String lastUpdatedBy, int customerId, int userId, int contactId){
         this.appointmentId = appointmentId;

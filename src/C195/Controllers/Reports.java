@@ -19,20 +19,18 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
 
 public class Reports implements Initializable {
     final CategoryAxis xAxis = new CategoryAxis();
@@ -54,18 +52,36 @@ public class Reports implements Initializable {
     public TreeTableView contacts_table;
     XYChart.Series series = new XYChart.Series();
 
+    /**
+     * navigates to appointments page
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toAppointments(ActionEvent actionEvent) throws IOException {
         Utility.changeScene(actionEvent, "/C195/Views/Appointments.fxml");
     }
 
+    /**
+     * navigates to customers page
+     * @param actionEvent
+     * @throws IOException
+     */
     public void toCustomers(ActionEvent actionEvent) throws IOException {
         Utility.changeScene(actionEvent, "/C195/Views/Customers.fxml");
     }
 
+    /**
+     * navigates to login page and requires the use to login once again to access the app
+     * @param actionEvent
+     * @throws IOException
+     */
     public void logout(ActionEvent actionEvent) throws IOException {
         Utility.changeScene(actionEvent, "/C195/Views/login.fxml");
     }
 
+    /**
+     * custom class to display contact data inside of the tree table
+     */
     class treeMember {
         String contactName;
         SimpleIntegerProperty apptID;
@@ -128,6 +144,10 @@ public class Reports implements Initializable {
             appointments = appointmentDAO.getAllAppointments(Login.currentUser.userId);
             customers = CustomerDAO.getAllCustomers();
             contacts = ContactDAO.getAllContacts();
+            avg_appt_length.setText(getAvgApptLength().toString()
+                    .substring(2)
+                    .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                    .toLowerCase());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -158,6 +178,9 @@ public class Reports implements Initializable {
         contacts_table.setShowRoot(false);
 //      getting and setting date for bar graph
 //      uses a hashmap to get a quantity of each appointment type
+        /**
+         * creating a hashmap to display key value pairs in the bar graph
+         */
         HashMap<String, Integer> apptTypes = new HashMap<String, Integer>();
         for (Appointment appt : appointments) {
             String type = appt.getType();
@@ -175,6 +198,38 @@ public class Reports implements Initializable {
             series.getData().add(new XYChart.Data(new_Map.getKey(), new_Map.getValue()));
         }
         appointments_graph.getData().addAll(series);
+        appointmentAlert();
+    }
 
+    /**
+     * method that returns the avg appointment length for all of a users appointments
+     * @return
+     */
+    public Duration getAvgApptLength(){
+        Duration sum = Duration.ZERO;
+        for (Appointment appt: appointments){
+            Instant start = appt.getStart().atZone(ZoneId.systemDefault()).toInstant();
+            Instant end = appt.getEnd().atZone(ZoneId.systemDefault()).toInstant();
+            Duration res = Duration.between(start, end);
+            sum = sum.plus(res);
+        }
+        return sum.dividedBy(appointments.size());
+    }
+
+    /**
+     * method to alert the user if they have an appointment in 15 minutes from login
+     */
+    public void appointmentAlert(){
+        LocalDateTime now = LocalDateTime.now();
+        Duration timeBetween = Duration.ZERO;
+        for (Appointment appt: appointments){
+            timeBetween = Duration.between(now,appt.getStart());
+            if (timeBetween.toMinutes() <=15 && timeBetween.toMinutes() >= 0){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Imminent");
+                alert.setHeaderText("you have an appointment: " + appt.getAppointmentId());
+                Optional<ButtonType> confirm = alert.showAndWait();
+            }
+        }
     }
 }

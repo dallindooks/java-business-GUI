@@ -17,11 +17,15 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 import javax.swing.*;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
@@ -46,7 +50,13 @@ public class Login implements Initializable {
     String currentLang = Locale.getDefault().getDisplayLanguage();
     public static User currentUser;
 
-    public void login(ActionEvent actionEvent){
+    /**
+     * This is the method that perfroms logical checks to compare the username and password inputs against the database
+     * @param actionEvent
+     * @throws IOException
+     */
+    public void login(ActionEvent actionEvent) throws IOException {
+        PrintWriter loginTracker = new PrintWriter(new FileWriter("login_activity.txt", true));
         String username = username_input.getText();
         String db_username = "";
         String password = password_input.getText();
@@ -81,10 +91,13 @@ public class Login implements Initializable {
                 } else {
                     error_label.setText("no user found");
                 }
+                loginTracker.println("User login attempt! userName Input = " + username + " FAILED to log in at: " + Timestamp.valueOf(LocalDateTime.now()));
+
             }
 
             if (user_toggle && pass_toggle){
                 System.out.println("login successful!");
+                loginTracker.println("User login attempt! userName Input = " + username + " SUCCESSFULLY logged in at: " + Timestamp.valueOf(LocalDateTime.now()));
                 currentUser = userDAO.getUser(db_username);
                 System.out.println(currentUser.username + " is currently logged in");
                 toAppointments(actionEvent);
@@ -94,12 +107,22 @@ public class Login implements Initializable {
             System.out.println("houston we have a problem");
             System.out.println(err);
         }
+        loginTracker.close();
     }
 
+    /**
+     * navigates to the appointments page
+     * @param actionEvent
+     * @throws IOException
+     */
     private void toAppointments(ActionEvent actionEvent) throws IOException {
         Utility.changeScene(actionEvent, "/C195/Views/Reports.fxml");
     }
 
+    /**
+     * gets the currently logged in user. This static method is references throughout the app.
+     * @return
+     */
     public static User getLoggedInUser(){
         return currentUser;
     }

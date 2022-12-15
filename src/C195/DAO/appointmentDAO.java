@@ -10,7 +10,12 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class appointmentDAO {
-
+    /**
+     *
+     * @param Id specify current user
+     * @return returns a list of all of a users appoinments
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAllAppointments(int Id) throws SQLException {
         ObservableList<Appointment> appointmentsResult = FXCollections.observableArrayList();
         Connection connection = JDBC.getConnection();
@@ -38,6 +43,11 @@ public class appointmentDAO {
         return appointmentsResult;
     }
 
+    /**
+     * method to delete an appointment
+     * @param Id refers to an appointment ID
+     * @throws SQLException
+     */
     public static void deleteAppointment(int Id) throws SQLException {
         Statement statement = JDBC.getConnection().createStatement();
         String query = "DELETE FROM appointments WHERE Appointment_ID=" + Id;

@@ -12,7 +12,11 @@ import java.sql.Statement;
 import java.util.stream.Collectors;
 
 public class ContactDAO {
-
+    /**
+     * method to get all contacts
+     * @return returns a list of contacts
+     * @throws SQLException
+     */
     public static ObservableList<Contact> getAllContacts() throws SQLException {
         ObservableList<Contact> contactsResult = FXCollections.observableArrayList();
         Connection connection = JDBC.getConnection();
@@ -28,6 +32,11 @@ public class ContactDAO {
         }
         return contactsResult;
     }
+
+    /**
+     * method to get all contact names
+     * @return returns a list of strings
+     */
     public static ObservableList<String> getAllContactNames(){
         ObservableList<String> contactNames = FXCollections.observableArrayList();
         try {
@@ -38,6 +47,12 @@ public class ContactDAO {
         return contactNames;
     }
 
+    /**
+     * gets a specific contact by name
+     * @param contactName name of a contact
+     * @return returns one Contact
+     * @throws SQLException
+     */
     public static Contact getContactByName(String contactName) throws SQLException {
         Connection connection = JDBC.getConnection();
         Statement stmt = connection.createStatement();
